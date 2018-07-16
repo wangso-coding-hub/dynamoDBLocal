@@ -118,8 +118,6 @@ public class DynamoDBWriter {
 		            PutItemRequest putItemRequest = new PutItemRequest(dynamoTableName, item);
 		            PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
 		            System.out.println("Result: " + putItemResult);	 
-		            
-		            
 	            }
 	            Thread.sleep(1000);
             }
