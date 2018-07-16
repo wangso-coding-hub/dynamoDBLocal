@@ -21,6 +21,8 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
+import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import org.example.basicApp.utils.DynamoDBUtils;
 import org.example.basicApp.utils.SampleUtils;
 import org.example.basicApp.webserver.GetMeasurementServlet;
@@ -64,7 +66,14 @@ public class WebServer {
         ClientConfiguration clientConfig = SampleUtils.configureUserAgentForSample(new ClientConfiguration());
         AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(credentialsProvider, clientConfig);
         dynamoDB.setRegion(region);
+	dynamoDB.setEndpoint("http://localhost:8000");
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDB);
+
+        // Describe our new table
+        DescribeTableRequest describeTableRequest = new DescribeTableRequest().withTableName(countsTableName);
+        TableDescription tableDescription = dynamoDB.describeTable(describeTableRequest).getTable();
+        System.out.println("Table Description: " + tableDescription);
+
         context.addServlet(new ServletHolder(new GetMeasurementServlet(dynamoDBUtils.createMapperForTable(countsTableName))),
                 "/GetMeasurements/*");
                 

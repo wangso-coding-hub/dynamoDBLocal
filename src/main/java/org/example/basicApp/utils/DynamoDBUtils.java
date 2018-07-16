@@ -67,7 +67,7 @@ public class DynamoDBUtils {
 
         CreateTableRequest createTableRequest =
                 new CreateTableRequest().withTableName(tableName)
-                        .withProvisionedThroughput(new ProvisionedThroughput(10L, 5L))
+                        .withProvisionedThroughput(new ProvisionedThroughput(50L, 50L))
                         .withKeySchema(ks)
                         .withAttributeDefinitions(attributeDefinitions);
 

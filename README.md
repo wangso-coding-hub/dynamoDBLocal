@@ -1,3 +1,4 @@
+
 Setup environment to run the visualApp application on AWS EC2:
 
 	1.	Create an AWS EC2 instance and add the IAM role that has administrative privileges.

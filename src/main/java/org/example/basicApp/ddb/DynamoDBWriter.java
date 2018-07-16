@@ -84,10 +84,10 @@ public class DynamoDBWriter {
         AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
         ClientConfiguration clientConfig = SampleUtils.configureUserAgentForSample(new ClientConfiguration());
         AmazonKinesis kinesis = new AmazonKinesisClient(credentialsProvider, clientConfig);
-        kinesis.setRegion(region);
+        kinesis.setRegion(region);	
         AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(credentialsProvider, clientConfig);
         dynamoDB.setRegion(region);
-         
+        dynamoDB.setEndpoint("http://localhost:8000"); 
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDB);
         dynamoDBUtils.createDynamoTableIfNotExists(dynamoTableName);
         LOG.info(String.format("%s DynamoDB table is ready for use", dynamoTableName));
@@ -103,17 +103,17 @@ public class DynamoDBWriter {
 	            
 	            // Add an item
 	            VrMeasurement measurementRecord =  new VrMeasurement();
-	            System.out.printf("record ready to put into DynamoDB is: %s \n" , measurementRecord.toString());
+	            //System.out.printf("record ready to put into DynamoDB is: %s \n" , measurementRecord.toString());
 
 	            for (int i=1; i<numUsers+1; i++) {
 	            	ddbRecordToWrite = generateDBRecord(measurementRecord, "user"+i);
 	                System.out.printf("record ready to write for user %s is: %s \n" ,i, ddbRecordToWrite.toString());
 
 		            Map<String, AttributeValue> item = newItem(ddbRecordToWrite);
-	//	            for (Map.Entry entry : item.entrySet())
-	//	            {
-	//	                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-	//	            }
+		            for (Map.Entry entry : item.entrySet())
+		            {
+		                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
+		            }
 		            
 		            PutItemRequest putItemRequest = new PutItemRequest(dynamoTableName, item);
 		            PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
